@@ -1,0 +1,114 @@
+# Steps to Deploy Web Application on Cloud VM
+
+## Step 1: Log in to Cloud VM
+- Opened Kali Linux terminal and logged into the cloud VM via SSH.
+- Command:
+ * sudo ssh -i Documents/cloudkey.pem ec2-user@34.230.49.137
+- Screenshot: [Screenshot-1(ssh).png]
+
+## Step 2: Clone Repository
+- Cloned the repository from my GitHub.
+- Command:
+
+  * git clone https://github.com/amjad1567/webapp
+- Screenshot:  [Screenshot-2(clone).png]
+
+## Step 3: Copy Files to Apache Root Folder
+- Copied the cloned files from the repository to the root folder of the Apache web server.
+- Command:
+
+ * sudo cp -r /home/ec2-user/webapp/cloudweb /var/www/html
+- Screenshot:  [Screenshot-3(copy).png]
+
+## Step 4: Start Apache Web Server
+- Started the Apache web server on the cloud VM.
+- Command:
+
+ * sudo yum install httpd
+ * sudo systemctl start httpd
+
+- Screenshot:  [Screenshot-4(httpd).png] &  Screenshot:  [Screenshot-3(copy).png]
+
+then , change the aws instance Security groups --> inbounded rules --> add rules 
+ - HTTP
+ - HTTPS 
+on custom mode
+
+## Step 5: Access Web Page
+- Accessed the cloud VM via a local web browser to show the deployed web page.
+- Screenshot:  [Screenshot-5(webpage).png]
+
+## Step 6: Install PHP and MySQL
+- Checked for PHP and MySQL installation, installing them if necessary.
+- Command:
+
+ * sudo yum install php
+
+## Step 7: Start MySQL Server
+- Started the MySQL server on the cloud VM and logged in.
+- Command:
+
+ * sudo systemctl start mysqld
+ * mysql -u root -p
+
+but i can't connect mysql .then iam stope it and  install  mariadb-server
+- Screenshot: screenshot-6(rootpass).png
+
+Purpose of Installing MariaDB Server:
+MariaDB Server: It provides a database management system (DBMS) that allows users to create, manage, and interact with databases. You would install the MariaDB server to store and manage data for web applications, enterprise software, or other systems that require a database backend.
+using command :
+
+ * sudo yum install mariadb105-server
+- Screenshot: Screenshot-7(mariadb-service).png
+
+then ,
+commant : 
+
+* sudo mysqd_safe --skip-grant-tables &
+
+Purpose of Using --skip-grant-tables:
+Password Recovery: This mode is often used for recovering a lost root password. When the server is running with this option, you can connect to the database without needing a password, allowing you to reset the root user’s password or modify user privileges.
+Troubleshooting: It can also be used to troubleshoot issues related to user permissions or access, as it effectively bypasses the normal authentication mechanisms.
+Important Note:
+Running a database server with --skip-grant-tables poses a significant security risk because it allows unrestricted access to all databases. It is advisable to only use this option in a secure environment and to revert to normal operations (without --skip-grant-tables) as soon as possible after completing your administrative tasks.
+
+- Screenshot: Screenshot-8(start_mariadb).png
+
+*  mysql -u root
+
+## Step 8: Create Database, Table, and User
+- Created a database,
+- create a table ;
+- Commands: 
+* CREATE DATABASE register;
+
+* USE register;
+
+* CREATE TABLE registration (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100),
+    ->     email VARCHAR(100),
+    ->     phone_number VARCHAR(15),
+    ->     password VARCHAR(255)
+    -> );
+
+
+
+- Screenshot: [Screenshot-9(create_db).png]
+- Screenshot: [Screenshot-10(table).png]
+
+## Step 9: Create User Registration Files
+- Created necessary PHP files to register a users and saved data in the database table.
+
+## Step 10: Log In as Created User
+- Logged back in as the user created during the registration process and shown the data in database.
+- Screenshot: [screenshot-11(register).png]
+- Screenshot: [Screenshot-12(data_store).png]
+
+## Step 11: Verify Accessibility
+- Verified if the web page is accessible to anyone using the public IP address.
+- Public IP: 44.211.206.95
+
+## Step 12: Document Findings
+- Noted down the public IP address and shared it for verification with peers[shared with arun].
+- Screenshot: [screenshot-5(webpage)]
